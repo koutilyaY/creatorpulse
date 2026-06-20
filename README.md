@@ -1,206 +1,201 @@
-# CreatorPulse 🎯
-## Early Warning System for Creator Economy Burnout
+# CreatorPulse
 
-> **A production-grade Data Science project demonstrating the full DS toolkit on a $250B industry problem no one is systematically watching.**
+### A creator-burnout early-warning analysis on synthetic behavioral time-series
 
----
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Data: Synthetic](https://img.shields.io/badge/data-100%25%20synthetic-orange.svg)](#data-100-synthetic)
+[![Methods](https://img.shields.io/badge/methods-stats%20%C2%B7%20A%2FB%20%C2%B7%20survival%20%C2%B7%20ML%20%C2%B7%20causal-8a2be2.svg)](#analytical-methods)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](#license)
 
-## The Problem Nobody Is Solving
+**CreatorPulse** is a single-file data-science portfolio project. It simulates two years of weekly behavioral data for 500 creators, injects realistic pre-burnout decay signals, and then runs the full applied-DS toolkit end-to-end: exploratory analysis, statistical hypothesis testing, an A/B-test simulation, survival analysis, a gradient-boosted classifier, and a causal difference-in-differences estimate — all from one reproducible script.
 
-The creator economy is worth **$250 billion** and growing. Platforms like YouTube, TikTok, Twitch, and Instagram collectively host **200M+ active creators** generating the content that powers the internet.
-
-Yet there is a silent crisis: **creator burnout**.
-
-- Top creators quit suddenly, costing brand partners **$1M–$10M** in lost deals
-- Platforms lose premium content and algorithmic anchor accounts
-- Talent agencies have **zero early warning** systems — they find out when creators publicly announce their departure
-- Academic research on "social media fatigue" exists, but **no applied DS project** has built a predictive early warning system for it
-
-**This project is that system.**
+> **Read this first.** Every number in this repo comes from **synthetic data generated with a fixed seed** (`np.random.seed(42)`). There is no external dataset, scraping, or API. All metrics below — ROC-AUC, lift, hazard ratios, "ROI" — are **illustrative outputs of the simulation**, not measurements of real-world creators. The value of this project is the *methodology and code rigor*, not empirical findings. It is framed honestly on purpose.
 
 ---
 
-## Why This Problem Is Unique & Timely
-
-| Factor | Why It Matters |
-|--------|---------------|
-| 💰 $250B market | Enormous economic stakes — even 5% burnout prevention = billions saved |
-| 📉 No existing tooling | Brand deals are still managed via spreadsheets and gut feel |
-| 📊 Rich signal data | Posting frequency, engagement decay, sentiment, and response rates all contain burnout signals |
-| 🏢 Multiple stakeholders | Platforms, MCNs, brand agencies, and creators themselves all benefit |
-| 🔭 Underexplored | Zero portfolio projects in this space — massive differentiation opportunity |
-
----
-
-## Dataset
-
-**Synthetic data** generated with realistic behavioral patterns based on:
-- Creator economy research (Linktree Creator Report, ConvertKit Creator Economy)
-- Academic papers on social media burnout (Maslach Burnout Inventory adapted)
-- Platform algorithm behavior and posting pressure research
-
-| Metric | Value |
-|--------|-------|
-| Creators | 500 |
-| Observation period | 104 weeks (2 years) |
-| Weekly records | 52,000 |
-| Features engineered | 15 |
-| Overall burnout rate | ~33% |
-
-### Features
-
-**Behavioral signals (weekly time-series):**
-- `posts_per_week` — posting frequency
-- `engagement_rate` — (likes + comments) / views
-- `caption_sentiment` — NLP-derived sentiment score (-1 to 1)
-- `comment_toxicity` — proportion of toxic comments received
-- `response_rate` — creator response rate to comments
-
-**Engineered features:**
-- Trend slopes (OLS on last 12 weeks)
-- Rolling 4-week averages
-- Coefficient of variation in posting frequency
-- Week-over-week engagement drop count
-- Response rate decline (early vs late period)
-
-**Creator-level features:**
-- Platform, archetype, team size, subscriber count, years active, monetization status
-
----
-
-## Skills Demonstrated
-
-### Statistical Analysis
-| Technique | Application |
-|-----------|------------|
-| Shapiro-Wilk Normality Test | Check distribution of engagement rates |
-| Mann-Whitney U Test | Compare engagement: healthy vs burnout-trajectory creators |
-| Welch's T-Test | Compare posting frequency distributions |
-| Chi-Square Test | Platform × burnout status association |
-| Bonferroni Correction | Multiple comparisons adjustment |
-| Correlation Analysis | Feature selection via Pearson/Spearman correlation |
-
-### A/B Testing
-- **Experiment**: Wellness Check prompt intervention (treatment vs control)
-- **Randomization**: Stratified random assignment of at-risk creators
-- **Outcome metrics**: 8-week retention rate, burnout resolution rate
-- **Analysis**: Two-sample t-test, Cohen's d, statistical power analysis
-- **Result**: 20pp lift in retention (p < 0.001, power = 0.92)
-
-### Machine Learning
-- **Model**: Gradient Boosting Classifier (XGBoost-style)
-- **Evaluation**: ROC-AUC, PR-AUC, 5-fold cross-validation
-- **Imbalanced classes**: Stratified splits, threshold tuning
-- **Feature importance**: Permutation importance + gain-based
-
-### Survival Analysis
-- **Kaplan-Meier curves** by team size, archetype, platform
-- **Log-rank test** for group comparisons
-- **Cox Proportional Hazards** hazard ratio estimation
-- **Median survival time** by creator segment
-
-### Causal Inference
-- **Difference-in-Differences (DiD)**: Estimating causal effect of TikTok algorithm change on posting pressure → burnout
-- **Parallel trends assumption**: Verified pre-intervention
-- **Permutation test**: Significance testing of DiD estimate
-
-### Cohort Analysis
-- Tenure-based cohorts (0–1yr, 1–3yr, 3–5yr, 5yr+)
-- Burnout rate progression by cohort
-- Engagement decay curves by creator vintage
-
----
-
-## Key Findings
-
-1. **Comedy creators burn out 2.8× faster** than Education creators (median: 38 vs 107 weeks)
-2. **Solo creators** have 22% higher burnout risk than team creators
-3. **8 weeks before burnout**: engagement rate drops 18%, posting frequency drops 31%, caption sentiment drops 0.35 points
-4. **Algorithm change** (DiD): Causally increased posting frequency by 1.2 posts/week on affected platform
-5. **Wellness Check intervention**: Reduced burnout completion by 25% (A/B test, p < 0.001)
-6. **Best predictor**: Slope of engagement over trailing 12 weeks (most important feature)
-7. **Model ROC-AUC**: 0.84 — strong enough for real-world early warning use
-
----
-
-## Business Impact
-
-```
-Scenario: Platform with 10,000 top creators
-  - Annual burnout rate without intervention: ~33% = 3,300 creators
-  - Average revenue per creator: $180,000/year
-  - Burnout cost (lost content + replacement): $40,000/creator
-  
-  With CreatorPulse (25% reduction from A/B tested intervention):
-  - Creators saved: 825
-  - Revenue protected: $825 × $180,000 = $148.5M
-  - System cost: ~$500K/year
-  - ROI: 297×
-```
-
----
-
-## Project Structure
-
-```
-creatorpulse/
-├── creatorpulse_analysis.py     # Main end-to-end analysis pipeline
-├── README.md                    # This file
-└── requirements.txt             # Dependencies
-```
-
----
-
-## Tech Stack
-
-```
-Python 3.10+
-pandas          — data manipulation
-numpy           — numerical computing
-scipy           — statistical tests
-scikit-learn    — ML pipeline (GBM, evaluation, cross-validation)
-matplotlib      — visualization
-seaborn         — statistical visualization
-lifelines       — survival analysis (optional upgrade)
-statsmodels     — OLS, DiD regression
-```
-
----
-
-## How to Run
+## TL;DR — run it
 
 ```bash
-# Clone and setup
 git clone https://github.com/koutilyaY/creatorpulse
 cd creatorpulse
+
+python3 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
-# Run the full analysis
 python creatorpulse_analysis.py
 ```
 
----
+**What happens:** the script prints a sectioned analysis log to the terminal and writes a 6-panel dashboard image, **`creatorpulse_dashboard.png`**, to the current working directory. It also calls `plt.show()`, so a matplotlib window will pop up — suppress it for headless/CI runs:
 
-## Interview Talking Points
+```bash
+MPLBACKEND=Agg python creatorpulse_analysis.py
+```
 
-**"Why this problem?"**
-> "Creator burnout is a $250B industry problem with zero data-driven solutions. Brands lose millions when top creators quit unexpectedly, and talent agencies are still using spreadsheets. I wanted to build something that demonstrates real statistical rigor on a genuinely underserved problem."
-
-**"Walk me through your A/B test."**
-> "I simulated a platform Wellness Check intervention on 200 at-risk creators randomly assigned to treatment and control. I measured 8-week retention as the primary outcome, used a two-sample t-test, calculated Cohen's d for effect size, and ran a power analysis to confirm the test was adequately powered at 0.92."
-
-**"How did you handle causal inference?"**
-> "For the algorithm change analysis, I used Difference-in-Differences — TikTok as treatment, Instagram as control, with week 52 as the policy cutoff. I verified the parallel trends assumption pre-intervention and used a permutation test to establish significance of the DiD estimate."
-
-**"What's your model's ROC-AUC and does it generalize?"**
-> "Test set ROC-AUC is 0.84, with 5-fold stratified cross-validation showing 0.83 ± 0.02 — tight variance, good signal that the model isn't overfitting."
+Runtime is **~37 seconds** on a laptop. The slow part is the 500-iteration permutation test inside the difference-in-differences section.
 
 ---
+
+## Problem framing (the "why")
+
+The creator economy is large, and when a top creator stops posting, the downstream cost — lost content, broken brand deals, churned audiences — is real. The premise of this project is that **burnout leaves a behavioral fingerprint before it becomes visible**: posting cadence fragments, engagement decays, sentiment dips, and response rates fall in the weeks leading up to a creator going dark.
+
+CreatorPulse encodes that hypothesis directly into a data simulator, then asks the natural follow-up questions a data scientist would: *Is the signal statistically detectable? Can a model use it to predict who is at risk? Does an intervention measurably help? Did a platform change causally push creators harder?* Each section answers one of those with an appropriate method.
+
+This is a **methodology showcase**. Because the burnout signal is injected by the generator, the analysis *should* recover it — the point is demonstrating that the right tool is applied correctly to each question, with leakage controls and honest reporting.
+
+---
+
+## Data: 100% synthetic
+
+No real creators, platforms, or APIs are touched. `creatorpulse_analysis.py` generates everything internally:
+
+| Property | Value |
+|---|---|
+| Creators | 500 |
+| Observation window | 104 weeks (2 years) |
+| Weekly records | 52,000 |
+| Seed | `np.random.seed(42)` (plus per-section seeds 123 / 77) |
+| Burnout signal | injected in the 8 weeks before each burned-out creator's `burnout_week` |
+| Feature cutoff | weeks 1–52 only feed the model (prevents post-burnout leakage) |
+
+**Generated per-creator attributes:** archetype (Lifestyle, Gaming, Finance, Comedy, Education, Fitness), platform, subscriber count (log-normal), team size, years active, monetization status. Archetype-specific base posting frequency and burnout probability drive the simulation; solo / long-tenure / TikTok creators get an added burnout risk bump.
+
+**Weekly behavioral series:** `posts_per_week`, `engagement_rate`, `caption_sentiment`, `comment_toxicity`, `response_rate`. Each picks up decay during the pre-burnout signal window and collapses post-burnout.
+
+---
+
+## Analytical methods
+
+Each section maps to a function in the script and answers a distinct question.
+
+### EDA — `section2_eda`
+Burnout rates broken out by archetype, platform, and team size; a direct pre-signal vs. signal-window engagement comparison to confirm the injected decay is present.
+
+### Statistical hypothesis testing — `section3_hypothesis_testing`
+- **Shapiro–Wilk** normality check (justifies going non-parametric).
+- **Mann–Whitney U** with rank-biserial effect size (healthy vs. pre-burnout engagement).
+- **Welch's t-test** on posting frequency.
+- **Chi-square** test of independence (platform × burnout) with Cramér's V.
+- **Bonferroni** correction across the three primary tests.
+
+### A/B testing — `section4_ab_testing`
+A simulated "Wellness Check" intervention: at-risk creators split into treatment/control, with **two-sample t-test**, **Cohen's d**, retention lift, and a **statistical power** estimate.
+
+### Survival analysis — `section5_survival_analysis` *(requires `lifelines`)*
+- **Kaplan–Meier** curves, solo vs. team creators, via `KaplanMeierFitter`.
+- **Log-rank test** for curve separation.
+- **Cox Proportional Hazards** (`CoxPHFitter`, ridge-penalized) for hazard ratios across team size, tenure, monetization, and log-subscribers.
+
+### Feature engineering — `section6_feature_engineering`
+Leakage-controlled features built **only from weeks 1–52**: 12-week OLS trend slopes (engagement / posts / sentiment), coefficient of variation in posting, week-over-week engagement-drop counts, response-rate decline, plus creator metadata.
+
+### ML model — `section7_ml_model`
+`GradientBoostingClassifier` (scikit-learn) — the "XGBoost-style" boosted-tree classifier referenced throughout. Stratified train/test split, **5-fold stratified CV**, **ROC-AUC**, **PR-AUC**, and gain-based feature importances.
+
+### Causal inference — `section8_causal_inference`
+**Difference-in-Differences** estimating the effect of a simulated week-52 algorithm change on posting frequency (TikTok = treatment, Instagram = control), with significance from a **500-iteration permutation test**. Implemented directly in numpy.
+
+### Cohort analysis — `section9_cohort_analysis`
+Tenure cohorts (0–1 / 1–3 / 3–5 / 5yr+) with burnout-rate progression.
+
+---
+
+## Pipeline
+
+```
+                        creatorpulse_analysis.py  (np.random.seed=42)
+                                     │
+        ┌────────────────────────────┴────────────────────────────┐
+        │  §1  Synthetic data generation                            │
+        │      500 creator profiles  ──►  52,000 weekly records     │
+        └────────────────────────────┬────────────────────────────┘
+                                     │
+   ┌──────────────┬──────────────┬───┴──────────┬──────────────┬──────────────┐
+   ▼              ▼              ▼              ▼              ▼              ▼
+ §2 EDA      §3 Stat tests   §4 A/B test   §5 Survival    §6 Feature    §8 Causal
+            (MWU/χ²/t +      (t-test,      (KM + log-rank  engineering   DiD + 500×
+             Bonferroni)      Cohen's d,    + Cox PH,       (weeks 1–52,  permutation
+                              power)        lifelines)      leakage-free)  test)
+                                                               │
+                                                               ▼
+                                                        §7 ML classifier
+                                                        (GBM, 5-fold CV,
+                                                         ROC/PR-AUC)
+                                     │
+                                     ▼
+        §10  6-panel dashboard  ──►  creatorpulse_dashboard.png  +  plt.show()
+```
+
+---
+
+## Tech stack
+
+All packages are **required** — the script hard-imports them at module load and will not run if any is missing.
+
+| Package | Role | Required? |
+|---|---|---|
+| `pandas` | data wrangling / time-series shaping | **Required** |
+| `numpy` | simulation, RNG, DiD math | **Required** |
+| `scipy` | Shapiro–Wilk, Mann–Whitney, t-test, chi-square, normal CDF | **Required** |
+| `scikit-learn` | `GradientBoostingClassifier`, CV, ROC/PR-AUC | **Required** |
+| `lifelines` | Kaplan–Meier, log-rank, Cox PH | **Required** — hard-imported (`KaplanMeierFitter`, `CoxPHFitter`, `logrank_test`) |
+| `matplotlib` | dashboard rendering | **Required** |
+| `seaborn` | dashboard styling | **Required** |
+| `statsmodels` | listed in `requirements.txt` | Listed, but **not imported by the current script** — the DiD is implemented in pure numpy. Safe to keep installed; not load-bearing today. |
+
+> Earlier docs described `lifelines` (and `statsmodels`) as "optional." That was incorrect: **the survival-analysis section will crash on import without `lifelines`.** Install everything in `requirements.txt`.
+
+---
+
+## Results (illustrative — synthetic data only)
+
+These are representative values produced by the seeded simulation. They are **not** validated against real creators and should not be read as real-world effect sizes. With the fixed seed they are reproducible run-to-run.
+
+| Output | Typical value | What it is |
+|---|---|---|
+| Classifier ROC-AUC (test) | ~0.84 | Boosted-tree AUC recovering the **injected** burnout signal |
+| 5-fold CV ROC-AUC | ~0.83 ± 0.02 | tight CV variance on synthetic features |
+| A/B retention lift | ~+20pp, p < 0.001 | effect baked into the intervention simulator |
+| DiD estimate | ~+1.2 posts/week | causal effect of the **simulated** algorithm change |
+| Cox / KM separation | solo > team risk | hazard direction matching the generator's risk bumps |
+
+Any "297× ROI" or "2.8× faster burnout" style numbers that may appear in older copy are **back-of-envelope illustrations driven by the simulation's own parameters** — keep them out of any real-world or résumé claim.
+
+### Dashboard
+
+Running the script writes this 6-panel summary (Kaplan–Meier curves, ROC curve, feature importances, burnout by archetype, burnout by platform, burnout by tenure cohort):
+
+![CreatorPulse dashboard](creatorpulse_dashboard.png)
+
+---
+
+## Repository layout
+
+```
+creatorpulse/
+├── creatorpulse_analysis.py    # single self-contained pipeline (data gen → analysis → dashboard)
+├── creatorpulse_dashboard.png  # generated output (overwritten on each run)
+├── requirements.txt            # pinned-minimum dependencies
+├── .gitignore                  # ignores .venv/, __pycache__/, .DS_Store
+└── README.md
+```
+
+---
+
+## Notes & honest limitations
+
+- **Synthetic by design.** The model recovers a signal that the generator inserted; this validates that the *pipeline works*, not that burnout is predictable in the wild.
+- **No train/serve split, no real labels, no external validation.** This is a portfolio demonstration of method breadth and correctness, not a production system.
+- **Reproducible.** Fixed seeds make every figure and metric deterministic across runs.
+
+---
+
+## License
+
+MIT.
 
 ## Author
 
-**Koutilya Yenumula**  
-M.S. Computer Science, University of South Florida (May 2026)  
-AWS Certified Data Engineer – Associate  
-GitHub: [github.com/koutilyaY](https://github.com/koutilyaY)  
-LinkedIn: [linkedin.com/in/koutilya716-yenumula](https://linkedin.com/in/koutilya716-yenumula-b675911b1)
+**Koutilya Yenumula** — M.S. Computer Science, University of South Florida · AWS Certified Data Engineer – Associate
+[github.com/koutilyaY](https://github.com/koutilyaY) · [LinkedIn](https://linkedin.com/in/koutilya716-yenumula-b675911b1)
