@@ -6,6 +6,9 @@
 [![Data: Synthetic](https://img.shields.io/badge/data-100%25%20synthetic-orange.svg)](#data-100-synthetic)
 [![Methods](https://img.shields.io/badge/methods-stats%20%C2%B7%20A%2FB%20%C2%B7%20survival%20%C2%B7%20ML%20%C2%B7%20causal-8a2be2.svg)](#analytical-methods)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](#license)
+[![Live Demo](https://img.shields.io/badge/%F0%9F%8E%A5_Live_Demo-Streamlit-FF4B4B.svg?logo=streamlit&logoColor=white)](https://YOUR-APP.streamlit.app)
+
+> **🎥 Live demo:** an interactive Streamlit dashboard (`streamlit_app.py`) is included. Deploy it free on [Streamlit Community Cloud](https://share.streamlit.io) (entrypoint `streamlit_app.py`) and replace this line + the badge above with your `*.streamlit.app` URL. <!-- TODO: paste your deployed URL here -->
 
 **CreatorPulse** is a single-file data-science portfolio project. It simulates two years of weekly behavioral data for 500 creators, injects realistic pre-burnout decay signals, and then runs the full applied-DS toolkit end-to-end: exploratory analysis, statistical hypothesis testing, an A/B-test simulation, survival analysis, a gradient-boosted classifier, and a causal difference-in-differences estimate — all from one reproducible script.
 
